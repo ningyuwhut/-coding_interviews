@@ -25,6 +25,10 @@ class LinkedList{
 	void print_reverse_no_recursive();
 	//O(1)时间内删除指针指向的节点
 	void remove(LinkedListNode* node_to_be_deleted);
+	LinkedListNode* first_common_node_with_stack(LinkedList* another_list );
+	LinkedListNode* first_common_node_no_stack(LinkedList* another_list );
+	int length();
+	void join(LinkedListNode* node );//和另外一个链表对接
 	~LinkedList();
     private:
     LinkedListNode* head;	

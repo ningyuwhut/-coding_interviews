@@ -4,6 +4,7 @@
 using namespace std;
 
 LinkedList* merge_two_sorted_linked_list(LinkedList* l_list, LinkedList* r_list);
+
 int main(){
     LinkedList* list=new LinkedList();
     list->insert(1);
@@ -27,7 +28,7 @@ int main(){
 
     cout << "print merged list" << endl;
     merged_list->print();
-    exit(0);
+//    exit(0);
 
 
     cout << "print list" << endl;
@@ -96,6 +97,26 @@ int main(){
     cout << "remove mid" << endl;
     list->remove_by_value(3);
     list->print();
+    list->insert(3);
+    LinkedList* another_list=new LinkedList();
+    another_list->insert(5);
+    another_list->join(list->get_node_by_index(2));
+    cout << "another_list" << endl;
+    another_list->print();
+    cout << "list" << endl;
+    list->print();
+    LinkedListNode* first_common_node= list->first_common_node_with_stack( another_list );
+    cout << "first common node " << endl;
+    cout << first_common_node->data << endl;
+    first_common_node= list->first_common_node_no_stack( another_list );
+    cout << "first common node " << endl;
+    if( first_common_node != NULL )
+	cout << first_common_node->data << endl;
+    else
+	cout << "no" << endl;
+	
+
+
     delete list;
 };
 

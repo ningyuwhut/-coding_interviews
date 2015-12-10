@@ -21,6 +21,7 @@ LinkedListNode* LinkedList::get_tail(){
     }
     return node;
 }
+//下标从1开始
 LinkedListNode* LinkedList::get_node_by_index(int index){
     if( index <= 0 || this->head==NULL)
 	return NULL;
@@ -233,4 +234,74 @@ LinkedList::~LinkedList(){
 	node=node->next;
 	delete node_to_be_deleted;
     }
+}
+
+int LinkedList::length(){
+    LinkedListNode* node=this->head;
+    int len=0;
+    while( node != NULL ){
+	len+=1;	
+	node=node->next;
+    }
+    return len;
+}
+
+LinkedListNode* LinkedList::first_common_node_with_stack(LinkedList* another_list ){
+    if( another_list == NULL )
+	return NULL;
+    stack<LinkedListNode*> list1;
+    stack<LinkedListNode*> list2;
+    LinkedListNode* node=this->head;
+    while ( node != NULL ){
+	list1.push(node);
+	node=node->next;
+    }
+    node=another_list->get_head();
+    while( node != NULL ){
+	list2.push(node);
+	node=node->next;
+    }
+    LinkedListNode* top_node1, *top_node2;
+    while( ! list1.empty() && !list2.empty() ){
+	top_node1 = list1.top();
+	top_node2 = list2.top();
+	if( top_node1 == top_node2 ){
+	    list1.pop();
+	    list2.pop();
+	}else{
+	    break;
+	}
+    }
+    if( list1.empty() || list2.empty() ) //没有公共节点
+	return NULL;
+    else
+	return top_node1->next;
+}
+
+LinkedListNode* LinkedList::first_common_node_no_stack(LinkedList* another_list ){
+    int length1=this->length();
+    int length2=another_list->length();
+    int difference=length1> length2 ? length1-length2: length2-length1;
+    LinkedListNode* node1=this->head;
+    LinkedListNode* node2=another_list->get_head();
+    //当两个链表长度相同时都取head
+    if( length1 > length2 ){
+	node1= this->get_node_by_index(difference ); 
+    }else if( length1 < length2 ){
+	node2= another_list->get_node_by_index(difference ); 
+    }
+    
+    while( node1 != NULL && node2 != NULL ){
+	if( node1 == node2 )
+	    break; 
+	node1=node1->next;
+	node2=node2->next;
+    }
+    if( node1 == NULL || node2 == NULL )
+	return NULL;
+    else
+	return node1;
+}
+void LinkedList::join(LinkedListNode* node){
+    this->head->next=node;
 }
