@@ -5,17 +5,17 @@
 
 using namespace std;
 
-
 template< typename T> void bubble_sort(T* array, size_t length);
 template< typename T> void insertion_sort(T* array, size_t length);
 template< typename T> void selection_sort(T* array, size_t length);
 template< typename T> void merge_sort_no_recursive(T* array, size_t length);
 template< typename T> void merge_sort(T* array, size_t length);
 template< typename T> void merge_sort_recursive(T* array, T* rep, size_t begin, size_t end);
+//合并区间为闭区间
+template< typename T> void merge_two_sorted_array(T* array, T* rep, size_t begin, size_t mid, size_t end);
 template< typename T> void local_swap(T& a, T& b); //swap是c++的内置函数，所以要另起一个名字
 
 template< typename T> bool check( T* array, size_t length );
-//void insertion_sort(int array[], size_t length); //两种声明方式是相同的
 
 int main(int argc, char ** argv){
 	srand((unsigned)time(NULL));  
@@ -30,8 +30,8 @@ int main(int argc, char ** argv){
 	bubble_sort(array, length);
 //	insertion_sort(array, length);
 //	selection_sort(array, length);
-//	merge_sort(array, length);
-	merge_sort_no_recursive(array, length);
+	merge_sort(array, length);
+//	merge_sort_no_recursive(array, length);
 	for( int i =0; i<length; ++i )
 		cout << array[i] << endl;
 	if( check( array, length ) == false ) 
@@ -99,27 +99,9 @@ template< typename T> void merge_sort_no_recursive(T* array, size_t length){
 	    int mid=i+((end-i)>>1);
 	    if( mid >= length )
 		mid=length;
-	    int m=i;
-	    int n=mid;
-	    int k=i;
-	    cout << "here" << m << " " << n << " " <<  end << endl;
-	    if( n > length ) 
-		cout << "error" << endl;
-	    while( m < mid && n< end ){
-		rep[k++]=array[m] < array[n] ? array[m++] : array[n++];
-	    }
-	    if( m < mid ){
-		while( m< mid ){
-		    rep[k++]=array[m++];
-		}
-	    }
-	    if( n < end ){
-		while( n < end ){
-		    rep[k++]=array[n++];
-		}
-	    }
-	    for( k=i;k<end; ++k )
-		array[k]=rep[k];
+
+	    merge_two_sorted_array(array, rep, i, mid-1, end-1 );
+
 	}
     }
 }
@@ -135,19 +117,18 @@ template< typename T> void merge_sort_recursive(T* array, T* rep, size_t begin, 
     size_t mid = begin + ((end-begin)>>1);
     merge_sort_recursive( array, rep, begin, mid );
     merge_sort_recursive( array, rep, mid+1, end);
+    merge_two_sorted_array(array, rep, begin, mid, end );
+}
+template< typename T> void merge_two_sorted_array(T* array, T* rep, size_t begin, size_t mid, size_t end){
     int i=begin, j=mid+1, k=begin;
-    while( i <=mid && j <= end ){
+    while( i <= mid && j <= end ){
 	rep[k++]=array[i] < array[j] ? array[i++] : array[j++]; 
     }
-    if( i <= mid ){
-	while( i <= mid ){
-	    rep[k++]=array[i++];
-	}
+    while( i <= mid ){
+	rep[k++]=array[i++];
     }
-    if( j <= end ){
-	while( j <= end ){
-	    rep[k++]=array[j++];
-	}
+    while( j <= end ){
+	rep[k++]=array[j++];
     }
     for( k=begin; k<=end; ++k ){
 	array[k]=rep[k];
