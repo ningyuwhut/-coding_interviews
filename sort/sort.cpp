@@ -90,7 +90,7 @@ template< typename T> void selection_sort(T* array, size_t length){
 template< typename T> void merge_sort_no_recursive(T* array, size_t length){
     T rep[length];
     int span,i;
-    for(span=1;span<length; span+=span){ //¼ä¸ô
+    for(span=1;span<length>>1; span+=span){ //¼ä¸ô
 	for( i=0; i< length; i+=(span*2)){
 	    int end=i+span*2;
 	    if( end >= length )
