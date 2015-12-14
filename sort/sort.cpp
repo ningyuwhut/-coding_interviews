@@ -13,13 +13,15 @@ template< typename T> void merge_sort(T* array, size_t length);
 template< typename T> void merge_sort_recursive(T* array, T* rep, size_t begin, size_t end);
 //合并区间为闭区间
 template< typename T> void merge_two_sorted_array(T* array, T* rep, size_t begin, size_t mid, size_t end);
+template< typename T> void quick_sort(T* array, size_t length);
+template< typename T> void quick_sort(T* array, size_t begin, size_t end);
+template< typename T> int partition(T* array, size_t begin, size_t end);
 template< typename T> void local_swap(T& a, T& b); //swap是c++的内置函数，所以要另起一个名字
 
 template< typename T> bool check( T* array, size_t length );
 
 int main(int argc, char ** argv){
 	srand((unsigned)time(NULL));  
-
 	int length= rand()%100+1;
 	cout << "length"<< length<<endl;
 	int *array = new int[length];
@@ -30,8 +32,9 @@ int main(int argc, char ** argv){
 	bubble_sort(array, length);
 //	insertion_sort(array, length);
 //	selection_sort(array, length);
-	merge_sort(array, length);
+//	merge_sort(array, length);
 //	merge_sort_no_recursive(array, length);
+	quick_sort(array, length);
 	for( int i =0; i<length; ++i )
 		cout << array[i] << endl;
 	if( check( array, length ) == false ) 
@@ -149,4 +152,33 @@ template< typename T> bool check( T* array, size_t length ){
 	}
     }
     return sorted;
+}
+
+template< typename T> void quick_sort(T* array, size_t length){
+    quick_sort(array, 0, length-1); //闭区间
+}
+template< typename T> void quick_sort(T* array, size_t begin, size_t end){
+    if( begin >= end )
+	return;
+    int pivot=partition(array, begin, end);
+    quick_sort(array, begin, pivot-1);
+    quick_sort(array, pivot+1, end);
+}
+template< typename T> int partition(T* array, size_t begin, size_t end){
+    int i=begin,j=end;
+    T pivot_value=array[i];
+    while( i < j ){
+	while( array[j] >= pivot_value )
+	    --j;
+	if( j > i ){
+	    array[i++]=array[j];
+	}
+	while(array[i] <= pivot_value )
+	    ++i;
+	if( i < j ){
+	    array[j--]=array[i];
+	}
+    }
+    array[i]=pivot_value;
+    return i;
 }
