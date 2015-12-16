@@ -1,50 +1,55 @@
 #include <iostream>
+#include <time.h>
 using namespace std;
-bool occurrance_more_than_half( int* array, int length, int& target);
+void minimum_k_numbers( int* array, int length, int k, int* output);
 int partition(int* array, int begin, int end);//闭区间
-bool occurrance_more_than_half_2( int* array, int length, int& target);
+bool minimum_k_numbers_2( int* array, int length, int k, int* output);
+
 int main(int argc, char** argv){
-    int array[] = {1,2,3,3,2,2,2,2};
-    int length=sizeof(array)/sizeof(array[0]);
-    cout << "length: " << length << endl;
-    int target;
-    if( occurrance_more_than_half_2( array, length, target ) )
-	cout << "success " << target << endl;
-    else
-	cout << "failure" << target << endl;
+    int* array;
+    int length;
+    srand((unsigned)time(NULL));  
+    cout << "input length of array :" << endl;
+    cin >> length;
+    array= new int[length];
+    for( int m=0; m < length; ++m ){
+	array[m]=rand()%100+1;
+	cout << " " <<  array[m]; 
+    }
+    cout << endl;
+	
+    int k;
+    cout << "input k :" << endl;
+    cin >> k;
+    int *target = new int[k];
+    minimum_k_numbers( array, length, k-1, target );
+    cout << "minimum k numbers " << endl;
+    for( int i =0 ; i < k; ++i )
+	cout << " " << target[i];
+    cout << endl;
     return 0;
 }
+//k是从0开始的
+void minimum_k_numbers( int* array, int length, int k, int* output){
+    if( array == NULL || output == NULL || length <= 0  || k >= length )
+	return;
 
-bool occurrance_more_than_half( int* array, int length, int& target){
-    if( array == NULL || length <= 0 )
-	return false;
-
-    int i=0,j=length-1, middle=length>>1;
+    int i=0,j=length-1;
     int pivot;
 
     pivot=partition(array, i, j);//闭区间
-    while( pivot != middle ){
-	if( pivot < middle )
+    while( pivot != k ){
+	if( pivot < k )
 	    pivot=partition(array, pivot+1, j );
 	else
 	    pivot=partition(array, i, pivot-1);
     }
-    target=array[pivot];
 
     i=0;
-    int count=0;
     while( i < length ){
-	cout << "ee " << array[i] << endl;
-	if( array[i] == target ){
-	    cout << i << " " << array[i] << endl;
-	    ++count;
-	}
+	output[i]=array[i];
 	++i;
     }
-    cout << "count " << count << endl;
-    if( count > length>> 1 )
-	return true;
-    return false;
 }
 int partition(int* array, int begin, int end){
     int pivot_value=array[begin];
@@ -69,7 +74,7 @@ int partition(int* array, int begin, int end){
     array[i]=pivot_value; //这句代码容易被忘掉
     return i;
 }
-bool occurrance_more_than_half_2( int* array, int length, int& target){
+bool minimum_k_numbers_2( int* array, int length, int& target){
     if( array == NULL || length <= 0  )
 	return false;
 
